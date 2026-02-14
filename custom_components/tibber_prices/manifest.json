@@ -1,0 +1,14 @@
+{
+  "domain": "tibber_prices",
+  "name": "Tibber Prices",
+  "config_flow": true,
+  "documentation": "https://github.com/tibber/tibber-prices",
+  "requirements": [],
+  "ssdp": [],
+  "zeroconf": [],
+  "homekit": {},
+  "dependencies": [],
+  "codeowners": ["@jules"],
+  "iot_class": "cloud_polling",
+  "version": "1.0.0"
+}
