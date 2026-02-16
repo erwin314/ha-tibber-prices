@@ -1,7 +1,7 @@
 [project]
-name = "tibberha"
-version = "0.1.0"
-description = "Add your description here"
+name = "ha-tibber-prices"
+version = "1.0.0"
+description = "Tibber Prices Custom Integration for Home Assistant"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = []
