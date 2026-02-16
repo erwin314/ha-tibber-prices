@@ -8,10 +8,6 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        # Home Assistant targets Python versions:
-        python-version: ["3.13"]
 
     steps:
       - name: Check out repository
@@ -23,7 +19,7 @@ jobs:
           enable-cache: true
 
       - name: Install dependencies
-        run: uv sync --frozen --python ${{ matrix.python-version }}
+        run: uv sync --frozen
 
       - name: Run Pytest
-        run: uv run --python ${{ matrix.python-version }} pytest tests/ --cov=custom_components.tibber_prices --cov-report=xml
+        run: uv run pytest tests/ --cov=custom_components.tibber_prices --cov-report=xml
