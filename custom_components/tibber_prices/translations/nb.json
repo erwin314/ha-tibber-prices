@@ -1,0 +1,53 @@
+{
+    "config": {
+        "step": {
+            "user": {
+                "title": "Konfigurer Tibber Priser",
+                "description": "Skriv inn din Tibber API-tilgangstoken.\n\nDu kan generere en på [developer.tibber.com](https://developer.tibber.com/).",
+                "data": {
+                    "access_token": "Tilgangstoken"
+                }
+            },
+            "home": {
+                "title": "Velg hjem",
+                "description": "Velg hjemmet du vil spore priser for.",
+                "data": {
+                    "home_id": "Hjem"
+                }
+            },
+            "reauth_confirm": {
+                "title": "Autentiser Tibber Priser på nytt",
+                "description": "Din nåværende tilgangsnøkkel er ugyldig eller utløpt. Vennligst skriv inn en ny Tibber API-tilgangsnøkkel.",
+                "data": {
+                    "access_token": "Tilgangstoken"
+                }
+            },
+            "reconfigure": {
+                "title": "Konfigurer Tibber Priser på nytt",
+                "description": "Oppdater din Tibber API-tilgangsnøkkel.",
+                "data": {
+                    "access_token": "Tilgangstoken"
+                }
+            }
+        },
+        "error": {
+            "cannot_connect": "Kunne ikke koble til",
+            "invalid_auth": "Ugyldig autentisering",
+            "unknown": "Uventet feil",
+            "no_homes_found": "Ingen hjem funnet på denne kontoen",
+            "home_not_found_with_token": "Det tidligere konfigurerte hjemmet ble ikke funnet med denne nøkkelen"
+        },
+        "abort": {
+            "already_configured": "Enheten er allerede konfigurert",
+            "reconfigure_successful": "Rekonfigurering vellykket",
+            "reauth_successful": "Re-autentisering vellykket"
+        }
+    },
+    "entity": {
+        "sensor": {
+            "price": {
+                "name": "Pris"
+            }
+        }
+    }
+}

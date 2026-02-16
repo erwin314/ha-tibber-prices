@@ -1,0 +1,9 @@
+{
+    "entity": {
+        "sensor": {
+            "price": {
+                "default": "mdi:currency-usd"
+            }
+        }
+    }
+}

@@ -1,0 +1,53 @@
+{
+    "config": {
+        "step": {
+            "user": {
+                "title": "Konfigurera Tibber Priser",
+                "description": "Ange din Tibber API-åtkomsttoken.\n\nDu kan generera en på [developer.tibber.com](https://developer.tibber.com/).",
+                "data": {
+                    "access_token": "Åtkomsttoken"
+                }
+            },
+            "home": {
+                "title": "Välj hem",
+                "description": "Välj det hem du vill spåra priser för.",
+                "data": {
+                    "home_id": "Hem"
+                }
+            },
+            "reauth_confirm": {
+                "title": "Autentisera Tibber Priser på nytt",
+                "description": "Den aktuella åtkomsttoken är ogiltig eller har gått ut. Ange en ny Tibber API-åtkomsttoken.",
+                "data": {
+                    "access_token": "Åtkomsttoken"
+                }
+            },
+            "reconfigure": {
+                "title": "Omkonfigurera Tibber Priser",
+                "description": "Uppdatera din Tibber API-åtkomsttoken.",
+                "data": {
+                    "access_token": "Åtkomsttoken"
+                }
+            }
+        },
+        "error": {
+            "cannot_connect": "Det gick inte att ansluta",
+            "invalid_auth": "Ogiltig autentisering",
+            "unknown": "Oväntat fel",
+            "no_homes_found": "Inga hem hittades på detta konto",
+            "home_not_found_with_token": "Det tidigare konfigurerade hemmet hittades inte med denna token"
+        },
+        "abort": {
+            "already_configured": "Enheten är redan konfigurerad",
+            "reconfigure_successful": "Omkonfiguration lyckades",
+            "reauth_successful": "Återautentisering lyckades"
+        }
+    },
+    "entity": {
+        "sensor": {
+            "price": {
+                "name": "Pris"
+            }
+        }
+    }
+}

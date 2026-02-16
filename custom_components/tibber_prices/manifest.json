@@ -1,0 +1,14 @@
+{
+  "domain": "tibber_prices",
+  "name": "Tibber Prices",
+  "config_flow": true,
+  "documentation": "https://github.com/erwin314/ha-tibber-prices",
+  "issue_tracker": "https://github.com/erwin314/ha-tibber-prices/issues",
+  "requirements": [],
+  "dependencies": [],
+  "codeowners": [
+    "@erwin314"
+  ],
+  "iot_class": "cloud_polling",
+  "version": "1.0.0"
+}

@@ -1,0 +1,53 @@
+{
+    "config": {
+        "step": {
+            "user": {
+                "title": "Configure Tibber Prices",
+                "description": "Enter your Tibber API Access Token.\n\nYou can generate one at [developer.tibber.com](https://developer.tibber.com/).",
+                "data": {
+                    "access_token": "Access Token"
+                }
+            },
+            "home": {
+                "title": "Select Home",
+                "description": "Select the home you want to track prices for.",
+                "data": {
+                    "home_id": "Home"
+                }
+            },
+            "reauth_confirm": {
+                "title": "Re-authenticate Tibber Prices",
+                "description": "The current access token is invalid or expired. Please enter a new Tibber API Access Token.",
+                "data": {
+                    "access_token": "Access Token"
+                }
+            },
+            "reconfigure": {
+                "title": "Reconfigure Tibber Prices",
+                "description": "Update your Tibber API Access Token.",
+                "data": {
+                    "access_token": "Access Token"
+                }
+            }
+        },
+        "error": {
+            "cannot_connect": "Failed to connect",
+            "invalid_auth": "Invalid authentication",
+            "unknown": "Unexpected error",
+            "no_homes_found": "No homes found on this account",
+            "home_not_found_with_token": "The previously configured home was not found with this token"
+        },
+        "abort": {
+            "already_configured": "Device is already configured",
+            "reconfigure_successful": "Re-configuration successful",
+            "reauth_successful": "Re-authentication successful"
+        }
+    },
+    "entity": {
+        "sensor": {
+            "price": {
+                "name": "Price"
+            }
+        }
+    }
+}

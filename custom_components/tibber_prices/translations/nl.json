@@ -1,0 +1,53 @@
+{
+    "config": {
+        "step": {
+            "user": {
+                "title": "Configureer Tibber Prijzen",
+                "description": "Voer uw Tibber API-toegangstoken in.\n\nU kunt er een genereren op [developer.tibber.com](https://developer.tibber.com/).",
+                "data": {
+                    "access_token": "Toegangstoken"
+                }
+            },
+            "home": {
+                "title": "Selecteer Huis",
+                "description": "Selecteer het huis waarvoor u prijzen wilt volgen.",
+                "data": {
+                    "home_id": "Huis"
+                }
+            },
+            "reauth_confirm": {
+                "title": "Her-authenticeer Tibber Prijzen",
+                "description": "Het huidige toegangstoken is ongeldig of verlopen. Voer een nieuw Tibber API-toegangstoken in.",
+                "data": {
+                    "access_token": "Toegangstoken"
+                }
+            },
+            "reconfigure": {
+                "title": "Herconfigureer Tibber Prijzen",
+                "description": "Update uw Tibber API-toegangstoken.",
+                "data": {
+                    "access_token": "Toegangstoken"
+                }
+            }
+        },
+        "error": {
+            "cannot_connect": "Verbinding mislukt",
+            "invalid_auth": "Ongeldige authenticatie",
+            "unknown": "Onverwachte fout",
+            "no_homes_found": "Geen huizen gevonden op dit account",
+            "home_not_found_with_token": "Het eerder geconfigureerde huis is niet gevonden met dit token"
+        },
+        "abort": {
+            "already_configured": "Apparaat is al geconfigureerd",
+            "reconfigure_successful": "Herconfiguratie geslaagd",
+            "reauth_successful": "Her-authenticatie geslaagd"
+        }
+    },
+    "entity": {
+        "sensor": {
+            "price": {
+                "name": "Prijs"
+            }
+        }
+    }
+}

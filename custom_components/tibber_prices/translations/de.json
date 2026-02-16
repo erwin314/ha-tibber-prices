@@ -1,0 +1,53 @@
+{
+    "config": {
+        "step": {
+            "user": {
+                "title": "Tibber Preise konfigurieren",
+                "description": "Geben Sie Ihr Tibber API-Zugriffstoken ein.\n\nSie können eines unter [developer.tibber.com](https://developer.tibber.com/) erstellen.",
+                "data": {
+                    "access_token": "Zugriffstoken"
+                }
+            },
+            "home": {
+                "title": "Zuhause auswählen",
+                "description": "Wählen Sie das Zuhause, für das Sie Preise verfolgen möchten.",
+                "data": {
+                    "home_id": "Zuhause"
+                }
+            },
+            "reauth_confirm": {
+                "title": "Tibber Preise neu authentifizieren",
+                "description": "Das aktuelle Zugriffstoken ist ungültig oder abgelaufen. Bitte geben Sie ein neues Tibber API-Zugriffstoken ein.",
+                "data": {
+                    "access_token": "Zugriffstoken"
+                }
+            },
+            "reconfigure": {
+                "title": "Tibber Preise neu konfigurieren",
+                "description": "Aktualisieren Sie Ihr Tibber API-Zugriffstoken.",
+                "data": {
+                    "access_token": "Zugriffstoken"
+                }
+            }
+        },
+        "error": {
+            "cannot_connect": "Verbindung fehlgeschlagen",
+            "invalid_auth": "Ungültige Authentifizierung",
+            "unknown": "Unerwarteter Fehler",
+            "no_homes_found": "Keine Häuser auf diesem Konto gefunden",
+            "home_not_found_with_token": "Das zuvor konfigurierte Zuhause wurde mit diesem Token nicht gefunden"
+        },
+        "abort": {
+            "already_configured": "Gerät ist bereits konfiguriert",
+            "reconfigure_successful": "Neukonfiguration erfolgreich",
+            "reauth_successful": "Neuauthentifizierung erfolgreich"
+        }
+    },
+    "entity": {
+        "sensor": {
+            "price": {
+                "name": "Preis"
+            }
+        }
+    }
+}
