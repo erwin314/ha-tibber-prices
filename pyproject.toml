@@ -1,16 +1,24 @@
 [project]
 name = "ha-tibber-prices"
-version = "1.0.0"
+version = "1.0.1"
 description = "Tibber Prices Custom Integration for Home Assistant"
 readme = "README.md"
-requires-python = ">=3.13"
+requires-python = ">=3.13.2"
 dependencies = []
 
 [dependency-groups]
 dev = [
-    "pytest>=8.3.3",
-    "pytest-asyncio>=0.24.0",
-    "pytest-cov>=6.0.0",
-    "pytest-homeassistant-custom-component>=0.13.195",
+    "pytest>=9.0.0",
+    "pytest-asyncio>=1.3.0",
+    "pytest-cov>=7.0.0",
+    "pytest-homeassistant-custom-component>=0.13.315",
     "ruff>=0.15.1",
 ]
+
+[tool.ruff]
+line-length = 88
+target-version = "py313"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I"]
+ignore = ["E501"]             # Ignore line length violations (let formatter handle it)
