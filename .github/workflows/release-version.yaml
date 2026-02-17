@@ -23,7 +23,7 @@ jobs:
       - name: Update Version Strings
         run: |
           # Update pyproject.toml
-          uv project edit --version "${{ github.event.inputs.new_version }}"
+          uv version "${{ github.event.inputs.new_version }}"
           
           # Update manifest.json via sync script
           uv run sync_version.py
