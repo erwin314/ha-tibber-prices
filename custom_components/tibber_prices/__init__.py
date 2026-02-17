@@ -8,8 +8,7 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import Platform
 from homeassistant.core import HomeAssistant, ServiceCall
 
-
-from .const import DOMAIN, CONF_ACCESS_TOKEN, CONF_HOME_ID
+from .const import CONF_ACCESS_TOKEN, CONF_HOME_ID, DOMAIN
 from .coordinator import TibberDataCoordinator
 
 _LOGGER = logging.getLogger(__name__)

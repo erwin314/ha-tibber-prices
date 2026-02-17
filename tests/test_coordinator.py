@@ -1,10 +1,11 @@
 """Tests for Tibber Data Coordinator."""
 
-from unittest.mock import patch, AsyncMock
 from datetime import datetime
+from unittest.mock import AsyncMock, patch
+from zoneinfo import ZoneInfo
+
 import pytest
 from homeassistant.helpers.update_coordinator import UpdateFailed
-from zoneinfo import ZoneInfo
 
 from custom_components.tibber_prices.coordinator import TibberDataCoordinator
 

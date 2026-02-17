@@ -6,16 +6,16 @@ from homeassistant import config_entries
 from homeassistant.core import HomeAssistant
 from homeassistant.data_entry_flow import FlowResultType
 
-from custom_components.tibber_prices.const import (
-    DOMAIN,
-    CONF_ACCESS_TOKEN,
-    CONF_HOME_ID,
-    CONF_HOME_NAME,
-)
 from custom_components.tibber_prices.config_flow import (
     CannotConnect,
     InvalidAuth,
     NoHomesFound,
+)
+from custom_components.tibber_prices.const import (
+    CONF_ACCESS_TOKEN,
+    CONF_HOME_ID,
+    CONF_HOME_NAME,
+    DOMAIN,
 )
 
 

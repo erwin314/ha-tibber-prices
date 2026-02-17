@@ -1,15 +1,15 @@
 """Test initialization of tibber_prices."""
 
-from unittest.mock import patch, AsyncMock
+from unittest.mock import AsyncMock, patch
 
-from pytest_homeassistant_custom_component.common import MockConfigEntry
-from homeassistant.exceptions import ConfigEntryNotReady
 from homeassistant.config_entries import ConfigEntryState
+from homeassistant.exceptions import ConfigEntryNotReady
+from pytest_homeassistant_custom_component.common import MockConfigEntry
 
 from custom_components.tibber_prices.const import (
-    DOMAIN,
     CONF_ACCESS_TOKEN,
     CONF_HOME_ID,
+    DOMAIN,
 )
 
 
