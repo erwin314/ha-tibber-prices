@@ -1,0 +1,18 @@
+name: Validate with hassfest
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+  schedule:
+    - cron: "0 0 * * *"
+
+jobs:
+  validate:
+    runs-on: "ubuntu-latest"
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+      - name: Run Home Assistant Custom Component Linter
+        uses: home-assistant/actions/hassfest@master
+        

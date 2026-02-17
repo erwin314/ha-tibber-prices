@@ -23,3 +23,6 @@ jobs:
 
       - name: Run Pytest
         run: uv run pytest tests/ --cov=custom_components.tibber_prices --cov-report=xml
+
+      - name: Check Version Consistency
+        run: uv run sync_version.py --check
