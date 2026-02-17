@@ -49,5 +49,11 @@
                 "name": "Prijs"
             }
         }
+    },
+    "services": {
+        "clear_cache": {
+            "name": "Cache wissen",
+            "description": "Wist de cache voor alle geconfigureerde Tibber Prices-items en dwingt een vernieuwing van de prijsgegevens af."
+        }
     }
 }

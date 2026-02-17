@@ -49,5 +49,11 @@
                 "name": "Pris"
             }
         }
+    },
+    "services": {
+        "clear_cache": {
+            "name": "Rensa cache",
+            "description": "Rensar cachen för alla konfigurerade Tibber Prices-poster och tvingar fram en uppdatering av prisdata."
+        }
     }
 }

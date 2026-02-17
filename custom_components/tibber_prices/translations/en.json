@@ -49,5 +49,11 @@
                 "name": "Price"
             }
         }
+    },
+    "services": {
+        "clear_cache": {
+            "name": "Clear Cache",
+            "description": "Clears the cache for all configured Tibber Prices entries and forces a refresh of the price data."
+        }
     }
 }

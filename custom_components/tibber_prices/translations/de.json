@@ -49,5 +49,11 @@
                 "name": "Preis"
             }
         }
+    },
+    "services": {
+        "clear_cache": {
+            "name": "Cache leeren",
+            "description": "Löscht den Cache für alle konfigurierten Tibber Prices-Einträge und erzwingt eine Aktualisierung der Preisdaten."
+        }
     }
 }
