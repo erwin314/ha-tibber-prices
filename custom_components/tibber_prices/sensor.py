@@ -7,7 +7,6 @@ import logging
 from homeassistant.components.sensor import (
     SensorDeviceClass,
     SensorEntity,
-    SensorStateClass,
 )
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant, callback
@@ -16,7 +15,7 @@ from homeassistant.helpers.event import async_track_time_change
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 from homeassistant.util import dt as dt_util
 
-from .const import DOMAIN, DEFAULT_NAME
+from .const import DEFAULT_NAME, DOMAIN
 from .coordinator import TibberDataCoordinator
 
 _LOGGER = logging.getLogger(__name__)
@@ -41,7 +40,6 @@ class TibberPriceSensor(CoordinatorEntity[TibberDataCoordinator], SensorEntity):
     _attr_has_entity_name = True
     _attr_translation_key = "price"
     _attr_device_class = SensorDeviceClass.MONETARY
-    _attr_state_class = SensorStateClass.MEASUREMENT
 
     def __init__(self, coordinator: TibberDataCoordinator, entry: ConfigEntry):
         """Initialize the sensor."""
@@ -68,9 +66,11 @@ class TibberPriceSensor(CoordinatorEntity[TibberDataCoordinator], SensorEntity):
         """Handle entity which will be added."""
         await super().async_added_to_hass()
 
-        # Update state every minute to check if we moved to next hour/quarter
+        # Update state every 15 minutes (at the start of the quarter)
         self.async_on_remove(
-            async_track_time_change(self.hass, self._update_state_by_timer, second=0)
+            async_track_time_change(
+                self.hass, self._update_state_by_timer, minute=[0, 15, 30, 45], second=0
+            )
         )
         self._update_state()
 
