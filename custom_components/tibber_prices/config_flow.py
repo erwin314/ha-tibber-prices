@@ -13,7 +13,14 @@ from homeassistant.data_entry_flow import FlowResult
 from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers import aiohttp_client
 
-from .const import API_URL, CONF_ACCESS_TOKEN, CONF_HOME_ID, CONF_HOME_NAME, DOMAIN
+from .const import (
+    API_URL,
+    CONF_ACCESS_TOKEN,
+    CONF_HOME_ID,
+    CONF_HOME_NAME,
+    DOMAIN,
+    TIBBER_URL,
+)
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -122,7 +129,10 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 return await self.async_step_home()
 
         return self.async_show_form(
-            step_id="user", data_schema=STEP_USER_DATA_SCHEMA, errors=errors
+            step_id="user",
+            data_schema=STEP_USER_DATA_SCHEMA,
+            errors=errors,
+            description_placeholders={"tibber_url": TIBBER_URL},
         )
 
     async def async_step_home(

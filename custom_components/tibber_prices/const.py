@@ -9,3 +9,4 @@ CONF_HOME_NAME = "home_name"
 DEFAULT_NAME = "Tibber Prices"
 
 API_URL = "https://api.tibber.com/v1-beta/gql"
+TIBBER_URL = "https://developer.tibber.com/"

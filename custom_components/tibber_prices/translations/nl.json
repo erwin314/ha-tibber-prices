@@ -3,7 +3,7 @@
         "step": {
             "user": {
                 "title": "Configureer Tibber Prijzen",
-                "description": "Voer uw Tibber API-toegangstoken in.\n\nU kunt er een genereren op [developer.tibber.com](https://developer.tibber.com/).",
+                "description": "Voer uw Tibber API-toegangstoken in.\n\nU kunt er een genereren op [developer.tibber.com]({tibber_url}).",
                 "data": {
                     "access_token": "Toegangstoken"
                 }

@@ -3,7 +3,7 @@
         "step": {
             "user": {
                 "title": "Configure Tibber Prices",
-                "description": "Enter your Tibber API Access Token.\n\nYou can generate one at [developer.tibber.com](https://developer.tibber.com/).",
+                "description": "Enter your Tibber API Access Token.\n\nYou can generate one at [developer.tibber.com]({tibber_url}).",
                 "data": {
                     "access_token": "Access Token"
                 }
