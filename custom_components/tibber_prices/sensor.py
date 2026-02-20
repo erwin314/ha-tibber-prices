@@ -45,11 +45,11 @@ class TibberPriceSensor(CoordinatorEntity[TibberDataCoordinator], SensorEntity):
         """Initialize the sensor."""
         super().__init__(coordinator)
         self._entry = entry
-        self._attr_unique_id = f"{entry.entry_id}_price"
+        self._attr_unique_id = f"{entry.unique_id}_price"
         home_name = entry.data.get("home_name")
         device_name = f"Tibber {home_name}" if home_name else DEFAULT_NAME
         self._attr_device_info = {
-            "identifiers": {(DOMAIN, entry.entry_id)},
+            "identifiers": {(DOMAIN, entry.unique_id)},
             "name": device_name,
             "manufacturer": "Tibber",
         }
