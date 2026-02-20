@@ -1,6 +1,8 @@
-# Tibber Prices Custom Integration for Home Assistant
+# Tibber Prices Integration for Home Assistant
 
 This project is a specialized Home Assistant integration focused solely on the robust retrieval of Tibber energy prices. It is engineered to ensure high availability of pricing data through advanced caching and fault-tolerant design, guaranteeing that your energy automations function reliably even during network interruptions.
+
+![alt text](docs/images/features.jpeg)
 
 ## Installation
 
@@ -50,3 +52,5 @@ If you encounter any issues, please open an issue in this repository.
 ## Disclaimer
 
 This component is not affiliated with, endorsed by, or associated with Tibber. "Tibber" is a trademark of Tibber. This integration is an independent open-source project that uses the public Tibber API.
+
+![alt text](docs/images/footer.jpeg)
