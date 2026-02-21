@@ -5,11 +5,12 @@ from unittest.mock import patch
 from homeassistant import config_entries
 from homeassistant.core import HomeAssistant
 from homeassistant.data_entry_flow import FlowResultType
+from pytest_homeassistant_custom_component.common import MockConfigEntry
 
-from custom_components.tibber_prices.config_flow import (
-    CannotConnect,
-    InvalidAuth,
-    NoHomesFound,
+from custom_components.tibber_prices.api import (
+    TibberAuthError,
+    TibberConnectionError,
+    TibberDataError,
 )
 from custom_components.tibber_prices.const import (
     CONF_ACCESS_TOKEN,
@@ -32,7 +33,7 @@ async def test_form_invalid_auth(hass: HomeAssistant) -> None:
     """Test we handle invalid auth."""
     with patch(
         "custom_components.tibber_prices.config_flow.validate_input",
-        side_effect=InvalidAuth,
+        side_effect=TibberAuthError,
     ):
         result = await hass.config_entries.flow.async_init(
             DOMAIN, context={"source": config_entries.SOURCE_USER}
@@ -50,7 +51,7 @@ async def test_form_cannot_connect(hass: HomeAssistant) -> None:
     """Test we handle cannot connect error."""
     with patch(
         "custom_components.tibber_prices.config_flow.validate_input",
-        side_effect=CannotConnect,
+        side_effect=TibberConnectionError,
     ):
         result = await hass.config_entries.flow.async_init(
             DOMAIN, context={"source": config_entries.SOURCE_USER}
@@ -68,7 +69,7 @@ async def test_form_no_homes(hass: HomeAssistant) -> None:
     """Test we handle no homes found."""
     with patch(
         "custom_components.tibber_prices.config_flow.validate_input",
-        side_effect=NoHomesFound,
+        side_effect=TibberDataError,
     ):
         result = await hass.config_entries.flow.async_init(
             DOMAIN, context={"source": config_entries.SOURCE_USER}
@@ -80,6 +81,24 @@ async def test_form_no_homes(hass: HomeAssistant) -> None:
 
     assert result["type"] == FlowResultType.FORM
     assert result["errors"] == {"base": "no_homes_found"}
+
+
+async def test_form_unknown_error(hass: HomeAssistant) -> None:
+    """Test we handle unknown errors."""
+    with patch(
+        "custom_components.tibber_prices.config_flow.validate_input",
+        side_effect=Exception("Unexpected exception"),
+    ):
+        result = await hass.config_entries.flow.async_init(
+            DOMAIN, context={"source": config_entries.SOURCE_USER}
+        )
+        result = await hass.config_entries.flow.async_configure(
+            result["flow_id"],
+            {CONF_ACCESS_TOKEN: "test_token"},
+        )
+
+    assert result["type"] == FlowResultType.FORM
+    assert result["errors"] == {"base": "unknown"}
 
 
 async def test_flow_user_one_home(hass: HomeAssistant) -> None:
@@ -142,3 +161,174 @@ async def test_flow_user_multiple_homes(hass: HomeAssistant) -> None:
         CONF_HOME_ID: "home2",
         CONF_HOME_NAME: "Home 2",
     }
+
+
+async def test_reauth_flow(hass: HomeAssistant) -> None:
+    """Test the reauthentication flow."""
+    mock_entry = MockConfigEntry(
+        domain=DOMAIN,
+        data={
+            CONF_ACCESS_TOKEN: "old_token",
+            CONF_HOME_ID: "home1",
+            CONF_HOME_NAME: "My Home",
+        },
+        unique_id="home1",
+    )
+    mock_entry.add_to_hass(hass)
+
+    result = await hass.config_entries.flow.async_init(
+        DOMAIN,
+        context={
+            "source": config_entries.SOURCE_REAUTH,
+            "entry_id": mock_entry.entry_id,
+            "unique_id": mock_entry.unique_id,
+        },
+        data={"access_token": "old_token"},
+    )
+
+    assert result["type"] == FlowResultType.FORM
+    assert result["step_id"] == "reauth_confirm"
+
+    with (
+        patch(
+            "custom_components.tibber_prices.config_flow.validate_input",
+            return_value=[{"id": "home1", "name": "My Home"}],
+        ),
+        patch("homeassistant.config_entries.ConfigEntries.async_reload") as mock_reload,
+    ):
+        result2 = await hass.config_entries.flow.async_configure(
+            result["flow_id"],
+            {CONF_ACCESS_TOKEN: "new_valid_token"},
+        )
+        assert result2["type"] == FlowResultType.ABORT
+        assert result2["reason"] == "reauth_successful"
+        assert mock_entry.data[CONF_ACCESS_TOKEN] == "new_valid_token"
+        assert len(mock_reload.mock_calls) == 1
+
+
+async def test_reauth_flow_home_not_found(hass: HomeAssistant) -> None:
+    """Test reauth flow when the home is no longer available."""
+    mock_entry = MockConfigEntry(
+        domain=DOMAIN,
+        data={
+            CONF_ACCESS_TOKEN: "old_token",
+            CONF_HOME_ID: "home1",
+            CONF_HOME_NAME: "My Home",
+        },
+        unique_id="home1",
+    )
+    mock_entry.add_to_hass(hass)
+
+    result = await hass.config_entries.flow.async_init(
+        DOMAIN,
+        context={
+            "source": config_entries.SOURCE_REAUTH,
+            "entry_id": mock_entry.entry_id,
+            "unique_id": mock_entry.unique_id,
+        },
+        data={"access_token": "old_token"},
+    )
+
+    with patch(
+        "custom_components.tibber_prices.config_flow.validate_input",
+        return_value=[{"id": "different_home", "name": "Other Home"}],
+    ):
+        result2 = await hass.config_entries.flow.async_configure(
+            result["flow_id"],
+            {CONF_ACCESS_TOKEN: "new_valid_token"},
+        )
+        assert result2["type"] == FlowResultType.FORM
+        assert result2["step_id"] == "reauth_confirm"
+        assert result2["errors"] == {"base": "home_not_found_with_token"}
+
+
+async def test_reauth_flow_exceptions(hass: HomeAssistant) -> None:
+    """Test reauth flow handles network and auth exceptions."""
+    mock_entry = MockConfigEntry(
+        domain=DOMAIN,
+        data={
+            CONF_ACCESS_TOKEN: "old_token",
+            CONF_HOME_ID: "home1",
+            CONF_HOME_NAME: "My Home",
+        },
+        unique_id="home1",
+    )
+    mock_entry.add_to_hass(hass)
+
+    result = await hass.config_entries.flow.async_init(
+        DOMAIN,
+        context={
+            "source": config_entries.SOURCE_REAUTH,
+            "entry_id": mock_entry.entry_id,
+            "unique_id": mock_entry.unique_id,
+        },
+        data={"access_token": "old_token"},
+    )
+
+    with patch(
+        "custom_components.tibber_prices.config_flow.validate_input",
+        side_effect=TibberConnectionError,
+    ):
+        res_conn = await hass.config_entries.flow.async_configure(
+            result["flow_id"], {CONF_ACCESS_TOKEN: "new_token"}
+        )
+        assert res_conn["errors"] == {"base": "cannot_connect"}
+
+    with patch(
+        "custom_components.tibber_prices.config_flow.validate_input",
+        side_effect=TibberAuthError,
+    ):
+        res_auth = await hass.config_entries.flow.async_configure(
+            result["flow_id"], {CONF_ACCESS_TOKEN: "new_token"}
+        )
+        assert res_auth["errors"] == {"base": "invalid_auth"}
+
+    with patch(
+        "custom_components.tibber_prices.config_flow.validate_input",
+        side_effect=Exception("Boom"),
+    ):
+        res_exc = await hass.config_entries.flow.async_configure(
+            result["flow_id"], {CONF_ACCESS_TOKEN: "new_token"}
+        )
+        assert res_exc["errors"] == {"base": "unknown"}
+
+
+async def test_reconfigure_flow(hass: HomeAssistant) -> None:
+    """Test the reconfiguration flow."""
+    mock_entry = MockConfigEntry(
+        domain=DOMAIN,
+        data={
+            CONF_ACCESS_TOKEN: "old_token",
+            CONF_HOME_ID: "home1",
+            CONF_HOME_NAME: "My Home",
+        },
+        unique_id="home1",
+    )
+    mock_entry.add_to_hass(hass)
+
+    result = await hass.config_entries.flow.async_init(
+        DOMAIN,
+        context={
+            "source": config_entries.SOURCE_RECONFIGURE,
+            "entry_id": mock_entry.entry_id,
+        },
+    )
+
+    assert result["type"] == FlowResultType.FORM
+    assert result["step_id"] == "reconfigure"
+
+    with (
+        patch(
+            "custom_components.tibber_prices.config_flow.validate_input",
+            return_value=[{"id": "home1", "name": "My Home"}],
+        ),
+        patch("homeassistant.config_entries.ConfigEntries.async_reload") as mock_reload,
+    ):
+        result2 = await hass.config_entries.flow.async_configure(
+            result["flow_id"],
+            {CONF_ACCESS_TOKEN: "new_valid_token"},
+        )
+        assert result2["type"] == FlowResultType.ABORT
+        assert result2["reason"] == "reconfigure_successful"
+        assert mock_entry.data[CONF_ACCESS_TOKEN] == "new_valid_token"
+        assert len(mock_reload.mock_calls) == 1

@@ -7,7 +7,6 @@ import random
 from datetime import datetime, timedelta
 from zoneinfo import ZoneInfo
 
-import aiohttp
 from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import ConfigEntryAuthFailed
 from homeassistant.helpers import aiohttp_client
@@ -15,7 +14,8 @@ from homeassistant.helpers.storage import Store
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 from homeassistant.util import dt as dt_util
 
-from .const import API_URL, DOMAIN
+from .api import TibberAuthError, get_prices
+from .const import DOMAIN
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -91,85 +91,12 @@ class TibberDataCoordinator(DataUpdateCoordinator):
     async def _fetch_data(self):
         """Execute the API call."""
         session = aiohttp_client.async_get_clientsession(self.hass)
-        headers = {
-            "Authorization": f"Bearer {self.access_token}",
-            "Content-Type": "application/json",
-        }
-
-        query = """
-        query($homeId: ID!) {
-          viewer {
-            home(id: $homeId) {
-              currentSubscription {
-                priceInfo(resolution: QUARTER_HOURLY) {
-                  current {
-                    currency
-                  }
-                  today {
-                    total
-                    startsAt
-                  }
-                  tomorrow {
-                    total
-                    startsAt
-                  }
-                }
-              }
-            }
-          }
-        }
-        """
-
-        variables = {"homeId": self.home_id}
-
         try:
-            async with session.post(
-                API_URL, json={"query": query, "variables": variables}, headers=headers
-            ) as response:
-                if response.status == 401:
-                    raise ConfigEntryAuthFailed("Authentication failed")
-                if response.status != 200:
-                    raise Exception(f"API returned status {response.status}")
-
-                json_data = await response.json()
-                if "errors" in json_data:
-                    # Check for unauthorized in errors
-                    for error in json_data["errors"]:
-                        if (
-                            "message" in error
-                            and "unauthorized" in error["message"].lower()
-                        ):
-                            raise ConfigEntryAuthFailed(error["message"])
-                    raise Exception(f"API errors: {json_data['errors']}")
-
-                data = json_data.get("data", {}).get("viewer", {}).get("home", {})
-                if not data:
-                    raise Exception("Home not found")
-
-                price_info = data.get("currentSubscription", {}).get("priceInfo", {})
-                if not price_info:
-                    # Maybe no subscription?
-                    raise Exception("No price info found (active subscription?)")
-
-                current_info = price_info.get("current")
-                currency = current_info.get("currency") if current_info else None
-
-                new_data = {}
-                for day_key in ["today", "tomorrow"]:
-                    points = price_info.get(day_key, [])
-                    for point in points:
-                        start_at = point["startsAt"]
-                        total = point["total"]
-                        new_data[start_at] = total
-
-                if not new_data:
-                    # This might happen if API returns empty lists
-                    raise Exception("No price data returned from API")
-
-                return new_data, currency
-
-        except aiohttp.ClientError as err:
-            raise Exception(f"Network error: {err}") from err
+            return await get_prices(session, self.access_token, self.home_id)
+        except TibberAuthError as err:
+            raise ConfigEntryAuthFailed(err) from err
+        except Exception as err:
+            raise Exception(f"Error fetching data: {err}") from err
 
     async def _save(self):
         """Save data to disk."""
