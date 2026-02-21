@@ -1,6 +1,6 @@
 [project]
 name = "ha-tibber-prices"
-version = "1.0.5"
+version = "1.0.6"
 description = "Tibber Prices Custom Integration for Home Assistant"
 readme = "README.md"
 requires-python = ">=3.14.2"
